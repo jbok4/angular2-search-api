@@ -10,23 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var github_service_1 = require("../services/github.service");
-var ProfileComponent = (function () {
-    function ProfileComponent(_githubService) {
-        this._githubService = _githubService;
-        this._githubService.getUser().subscribe(function (user) {
-            console.log(user);
-        });
+var http_1 = require("@angular/http");
+require("rxjs/add/operator/map");
+var GithubService = (function () {
+    function GithubService(_http) {
+        this._http = _http;
+        this.client_id = '9eca7bb22b1f100b5c29';
+        this.client_secret = 'a89f3982951ea2a06e9305590c52d4393f14a596';
+        console.log('Github Service Ready...');
+        this.username = 'jbok4';
     }
-    return ProfileComponent;
+    GithubService.prototype.getUser = function () {
+        return this._http.get('http://api.github.com/users/' + this.username + '?client_id=' + this.client_id + '&client_secret=' + this.client_secret)
+            .map(function (res) { return res.json(); });
+    };
+    return GithubService;
 }());
-ProfileComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'profile',
-        templateUrl: 'profile.component.html'
-    }),
-    __metadata("design:paramtypes", [github_service_1.GithubService])
-], ProfileComponent);
-exports.ProfileComponent = ProfileComponent;
-//# sourceMappingURL=profile.component.js.map
+GithubService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], GithubService);
+exports.GithubService = GithubService;
+//# sourceMappingURL=github.service.js.map
